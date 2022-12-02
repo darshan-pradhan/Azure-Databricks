@@ -40,8 +40,8 @@ def generate_clean_and_quarantine_dataframes(
     dataframe: DataFrame,
 ) -> (DataFrame, DataFrame):
     return (
-        dataframe.filter("device_id IS NOT NULL"),
-        dataframe.filter("device_id IS NULL"),
+        dataframe.filter(col("Runtime") > 0 and col("budget")>=1000000),
+        dataframe.filter(col("Runtime") <= 0 or col("budget")<1000000),
     )
 
 
@@ -97,24 +97,16 @@ def transform_bronze(bronze: DataFrame, quarantine: bool = False) -> DataFrame:
 
     if not quarantine:
         silver_movie = silver_movie.select(
-            "value",
-            col("device_id").cast("integer").alias("device_id"),
-            "steps",
-            col("time").alias("eventtime"),
-            "name",
-            col("time").cast("date").alias("p_eventdate"),
+            "movie", "Id", "Title", "Overview", "Tagline", "Budget", "Revenue", "ImdbUrl", "TmdbUrl", "PosterUrl", "BackdropUrl", 
+    "OriginalLanguage", "ReleaseDate", "RunTime" ,"Price", "CreatedDate", "UpdatedDate", "UpdatedBy", "CreatedBy", "genres", "status", "p_ingestdate" 
         )
     else:
-        silver_health_tracker = silver_health_tracker.select(
-            "value",
-            "device_id",
-            "steps",
-            col("time").alias("eventtime"),
-            "name",
-            col("time").cast("date").alias("p_eventdate"),
+        silver_health_tracker = silver_movie.select(
+           "movie", "Id", "Title", "Overview", "Tagline", "Budget", "Revenue", "ImdbUrl", "TmdbUrl", "PosterUrl", "BackdropUrl", 
+    "OriginalLanguage", "ReleaseDate", "RunTime" ,"Price", "CreatedDate", "UpdatedDate", "UpdatedBy", "CreatedBy", "genres", "status", "p_ingestdate" 
         )
 
-    return silver_health_tracker
+    return silver_movie
 
 
 # COMMAND ----------
