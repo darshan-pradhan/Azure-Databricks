@@ -66,28 +66,31 @@ def read_batch_raw(rawPath: str) -> DataFrame:
 
 def transform_bronze(bronze: DataFrame, quarantine: bool = False) -> DataFrame:
 
-    json_schema = """
-      movie STRING,
-      BackdropUrl string,
-      Budget double,
-      CreatedBy string,
-      CreatedDate DATE,
-      Id long,
-      ImdbUrl string,
-      OriginalLanguage string,
-      Overview string,
-      PosterUrl string,
-      Price double,
-      ReleaseDate string,
-      Revenue double,
-      RunTime long,
-      Tagline string,
-      Title string,
-      TmdbUrl string,
-      UpdatedBy string,
-      UpdatedDate DATE,
-      genres array
-  """
+    json_schema = StructType(fields=[
+        StructField('BackdropUrl', StringType(), True),
+        StructField('Budget', StringType(), True),
+        StructField('CreatedDate', DateType(), True),
+        StructField('Id', IntegerType(), True),
+        StructField('ImdbUrl', StringType(), True),
+        StructField('OriginalLanguage', StringType(), True),
+        StructField('Overview', StringType(), True),
+        StructField('PosterUrl', StringType(), True),
+        StructField('Price', DoubleType(), True),
+        StructField('ReleaseDate', StringType(), True),
+        StructField('Revenue', DoubleType(), True),
+        StructField('RunTime', DoubleType(), True),
+        StructField('Tagline', StringType(), True),
+        StructField('Title', StringType(), True),
+        StructField('TmdbUrl', StringType(), True),
+        StructField(
+            'genres', ArrayType(
+                StructType([
+                    StructField('id', IntegerType(), True),
+                    StructField('name', StringType(), True)
+                ])
+            )
+        )
+    ])
 
     bronzeAugmentedDF = bronze.withColumn(
         "nested_json", from_json(col("movie"), json_schema)
