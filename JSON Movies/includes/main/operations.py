@@ -60,7 +60,7 @@ def read_batch_delta(deltaPath: str) -> DataFrame:
 
 def read_batch_raw(rawPath: str) -> DataFrame:
     kafka_schema = "value ARRAY"
-    return spark.read.format("json").option("multiline","true").schema(kafka_schema).load(rawPath).select(explode(raw_movie_data_df.movie).alias("value")
+    return spark.read.format("json").option("multiline","true").schema(kafka_schema).load(rawPath).select(explode(raw_movie_data_df.movie).alias("movie")
 
 # COMMAND ----------
 
