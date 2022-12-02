@@ -368,7 +368,10 @@ display(silver_movie_quarantine)
 
 # ANSWER
 (
-    silver_health_tracker_clean.select(*)
+    silver_health_tracker_clean.select(
+        "Id", "Title", "Overview", "Tagline", "Budget", "Revenue", "ImdbUrl", "TmdbUrl", "PosterUrl", "BackdropUrl", 
+    "OriginalLanguage", "ReleaseDate", "RunTime" ,"Price", "CreatedDate", "UpdatedDate", "UpdatedBy", "CreatedBy", "genres", "status", "p_ingestdate" 
+    )
     .write.format("delta")
     .mode("append")
     .partitionBy("p_ingestdate")
