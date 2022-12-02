@@ -368,7 +368,7 @@ display(silver_movie_quarantine)
 
 # ANSWER
 (
-    silver_health_tracker_clean.select(
+    silver_movie_clean.select(
         "Id", "Title", "Overview", "Tagline", "Budget", "Revenue", "ImdbUrl", "TmdbUrl", "PosterUrl", "BackdropUrl", 
     "OriginalLanguage", "ReleaseDate", "RunTime" ,"Price", "CreatedDate", "UpdatedDate", "UpdatedBy", "CreatedBy", "genres", "status", "p_ingestdate" 
     )
