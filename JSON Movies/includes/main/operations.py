@@ -98,18 +98,11 @@ def transform_bronze(bronze: DataFrame, quarantine: bool = False) -> DataFrame:
 
     silver_movie = bronzeAugmentedDF.select("movie", "nested_json.*")
 
-    if not quarantine:
-        silver_movie = silver_movie.select(
+
+    return silver_movie = silver_movie.select(
             "movie", "Id", "Title", "Overview", "Tagline", "Budget", "Revenue", "ImdbUrl", "TmdbUrl", "PosterUrl", "BackdropUrl", 
     "OriginalLanguage", "ReleaseDate", "RunTime" ,"Price", "CreatedDate", "UpdatedDate", "UpdatedBy", "CreatedBy", "genres", "status", "p_ingestdate" 
-        )
-    else:
-        silver_health_tracker = silver_movie.select(
-           "movie", "Id", "Title", "Overview", "Tagline", "Budget", "Revenue", "ImdbUrl", "TmdbUrl", "PosterUrl", "BackdropUrl", 
-    "OriginalLanguage", "ReleaseDate", "RunTime" ,"Price", "CreatedDate", "UpdatedDate", "UpdatedBy", "CreatedBy", "genres", "status", "p_ingestdate" 
-        )
-
-    return silver_movie
+        ).dropDuplicates()
 
 
 # COMMAND ----------
