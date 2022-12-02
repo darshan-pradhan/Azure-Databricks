@@ -411,9 +411,9 @@ LOCATION "{silverPath}"
 from delta.tables import DeltaTable
 
 bronzeTable = DeltaTable.forPath(spark, bronzePath)
-silverAugmented = silver_movie_clean.withColumn("status", lit("loaded"))
+silverAugmented = silver_movie_clean.withColumn("status", lit("loaded")).dropDuplicates()
 
-update_match = "bronze.value = clean.value"
+update_match = "bronze.movie = clean.movie"
 update = {"status": "clean.status"}
 
 (
@@ -441,7 +441,7 @@ silverAugmented = silver_movie_quarantine.withColumn(
     "status", lit("quarantined")
 )
 
-update_match = "bronze.value = quarantine.value"
+update_match = "bronze.movie = quarantine.movie"
 update = {"status": "quarantine.status"}
 
 (
@@ -450,4 +450,3 @@ update = {"status": "quarantine.status"}
     .whenMatchedUpdate(set=update)
     .execute()
 )
-
